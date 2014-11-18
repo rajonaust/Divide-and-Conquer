@@ -1,0 +1,33 @@
+// Meet In The Middle
+// Given N numbers of coin and value K . Need to decide whether K is made by any subset of N coins .
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define mx 34
+long long arr[mx+10] , value[(1<<20)] , cnt = 0 ;
+void gen_subset_sum(int index,int range,long long sum)
+{
+    if(index>range) { value[cnt++] = sum ; return ; }
+    gen_subset_sum(index+1,range,sum+arr[index]);
+    gen_subset_sum(index+1,range,sum);
+}
+int main()
+{
+    int N , K ; // N is the number of coins and K is the value .
+    cin >> N >> K ;
+    for(int i=1;i<=N;i++) cin >> arr[i] ;
+
+    gen_subset_sum(1,N/2,0); // Time Complexity O(2^N/2) // Bitmask DP can also be used to generate subset sum .
+    sort(value,value+cnt);
+    int temp = cnt ;
+
+    gen_subset_sum((N/2)+1,N,0); // Time Complexity O(2^N/2) // Bitmask DP can also be used to generate subset sum .
+    bool flag = false ;
+    for(int i=temp;i<cnt;i++)
+    {
+        if(binary_search(&value[0],&value[temp],K-value[i])) { flag = true ; break ; }
+    }
+    if( flag ) puts("YES") ; else puts("NO");
+
+    return 0;
+}
