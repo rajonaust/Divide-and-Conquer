@@ -1,0 +1,63 @@
+// Binary Search Example
+// Given N positive numbers and a Positive Number M .
+// Find out the M sets where every set contain one or more consecutive numbers and the summation of the numbers of any set is minimum .
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+long long arr[100+10];
+bool isValid(long long val,int N,int M)
+{
+    long long temp = 0 ;
+    for(int i=1;i<=N;i++)
+    {
+        if(temp+arr[i]>val)
+        {
+            temp=arr[i];
+            M--;
+        }
+        else temp+=arr[i];
+    }
+    if(M>=1) return true ; else return false ;
+}
+void Print_Solution(long long val,int N,int M)
+{
+    long long temp = arr[1] ;
+    for(int i=2;i<=N;i++)
+    {
+        if(N-i+1<M)
+        {
+            printf("%lld\n",temp);
+            temp=arr[i];
+            M--;
+        }
+        else if(temp+arr[i]>val)
+        {
+            printf("%lld\n",temp);
+            temp=arr[i];
+            M--;
+        }
+        else temp+=arr[i];
+    }
+    printf("%lld\n",temp);
+}
+int main()
+{
+    int N , M ; // N is numbers of integers and M is the set number where divides the numbers in M sets .
+    scanf("%d%d",&N,&M);
+    for(int i=1;i<=N;i++) scanf("%lld",&arr[i]);
+
+    long long lo = *max_element(&arr[1],&arr[N+1]) , hi = 100000000000000 ;
+
+    while(lo<hi)
+    {
+        long long mid = lo+(hi-lo)/2 ;
+        if(isValid(mid,N,M)) hi=mid;
+        else lo = mid+1;
+    }
+
+    printf("Minimum summation of a set is required : %lld\n",hi);
+
+    Print_Solution(hi,N,M);
+
+    return 0;
+}
