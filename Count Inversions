@@ -1,0 +1,56 @@
+// Count Inversions .
+// Divide and Conquer Method .
+// Give n numbers . Find out how many times in the array that arr[i] > arr[j] and i < j .
+// Also calculate how many adjacent elements needs to swap to make the array is a sorted array .
+ #include <cstdio>
+using namespace std;
+#define mx 1000000
+long long arr[mx+10] ;
+long long merge(long long low, long long mid , long long high)
+{
+    long long temp [high-low+1];
+    long long i = low , j = mid + 1 , k = 1 , inv_count = 0 ;
+    while(i<=mid&&j<=high)
+    {
+        if(arr[i]<arr[j]) temp[k++] = arr[i++];
+        else
+        {
+            temp[k++] = arr[j++];
+            inv_count+=mid-i+1;
+        }
+    }
+    while(i<=mid) temp[k++] = arr[i++];
+    while(j<=high) temp[k++] = arr[j++];
+    for(i=1;i<k;i++) arr[low++] = temp[i];
+    return inv_count ;
+}
+long long merge_sort(long long lo,long long hi)
+{
+    long long mid = (lo+hi)/2 , inv_count = 0 ;
+    if(lo!=hi)
+    {
+        inv_count+=merge_sort(lo,mid);
+        inv_count+=merge_sort(mid+1,hi);
+        inv_count+=merge(lo,mid,hi);
+    }
+    return inv_count ;
+}
+int main()
+
+{
+    long long N; // N is the number of elements .
+    while(scanf("%lld",&N)==1)
+    {
+        for(long long i=1;i<=N;i++) scanf("%lld",&arr[i]);
+        printf("%lld\n",merge_sort(1,N));
+    }
+    return 0;
+
+}
+/*
+3
+3 1 2
+*/
+/*
+2
+*/
