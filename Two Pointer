@@ -1,0 +1,71 @@
+// Two Pointer
+// Given n numbers of elements array A[] and a number k . Find the number of sub-arrays in the array A[] , which has at least k equal numbers .
+// Time Complexity O( N ) .
+
+#include <stdio.h>
+#include <map>
+using namespace std;
+
+int A[1000000];
+map <int,int> cnt ;
+
+int main()
+{
+    int n , k ; // n is the number of elements and any sub-array requires k equal numbers .
+    scanf("%d%d",&n,&k);
+    for(int i=1;i<=n;i++) scanf("%d",&A[i]);
+
+    int lo = 1 , hi = 0 , check = 0 ;
+    long long ans = 0 ;
+
+    while( hi<=n )
+    {
+        if(check!=0)
+        {
+            ans = ans + (long long)(n-hi+1) ;
+            cnt[A[lo]]--;
+            if(cnt[A[lo]]+1==k) check--;
+            lo++;
+        }
+        else
+        {
+            hi++;
+            cnt[A[hi]]++;
+            if(cnt[A[hi]]==k) check++;
+        }
+    }
+
+    printf("%lld\n",ans);
+    return 0;
+}
+/*
+20 2
+6 7 2 4 6 8 4 3 10 5 3 5 7 9 1 2 8 1 9 10
+*/
+/*
+131
+*/
+
+/*
+4 2
+1 2 1 2
+*/
+/*
+3
+*/
+
+/*
+5 3
+1 2 1 1 3
+*
+/*
+2
+*/
+
+/*
+3 1
+1 1 1
+*/
+/*
+6
+*/
